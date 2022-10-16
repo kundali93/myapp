@@ -12,7 +12,7 @@
 			try {
 				$conn = new PDO('mysql:host=' .$this->server .';dbname=' . $this->dbname, $this->user, $this->pass);
 				$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-				echo "connection done";
+				echo "connection done\n";
 				return $conn;
 			} catch (\Exception $e) {
 				echo "Database Error: " . $e->getMessage();
