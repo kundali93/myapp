@@ -3,7 +3,7 @@ echo "helo00";
 try {
     $dbhost = $_SERVER["awseb-e-ez8jeiprkj-stack-awsebrdsdatabase-t4rcjts3piik.ciedmyepmavr.ap-south-1.rds.amazonaws.com:3306"];
     //$link = new mysqli($_SERVER['awseb-e-ez8jeiprkj-stack-awsebrdsdatabase-t4rcjts3piik.ciedmyepmavr.ap-south-1.rds.amazonaws.com:3306'], $_SERVER['admin'], $_SERVER['rajesh123A'], $_SERVER['react_crud'], $_SERVER['3306']);
-    $dbname = $_SERVER["react_crud"];
+    $dbname = $_SERVER["user"];
     $charset = 'utf8' ;
 
     $dsn = "mysql:host={$dbhost};dbname={$dbname};charset={$charset}";
