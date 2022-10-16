@@ -1,22 +1,20 @@
 <?php
-echo "helo00";
-try {
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: *");
+header("Access-Control-Allow-Methods: *");
 
-    $dbhost = $_SERVER['awseb-e-vjmh8svkrk-stack-awsebrdsdatabase-ckov2yb0cvbk.ciedmyepmavr.ap-south-1.rds.amazonaws.com'];
-    $dbport = $_SERVER['3306'];
-    $dbname = $_SERVER['new_db'];
-    $charset = 'utf8' ;
+include 'DbConnect.php';
+$objDb = new DbConnect;
+$conn = $objDb->connect();
 
-    $dsn = "mysql:host={$dbhost};port={$dbport};dbname={$dbname};charset={$charset}";
-    $username = $_SERVER['admin'];
-    $password = $_SERVER['rajesh123A'];
 
-    $pdo = new PDO($dsn, $username, $password);
+$sth = $conn->prepare("SELECT * FROM user");
+$sth->execute();
 
-}
-
-//catch exception
-catch(Exception $e) {
-  echo 'Message: ' .$e->getMessage();
-}
+/* Fetch all of the remaining rows in the result set */
+print("Fetch all of the remaining rows in the result set:\n");
+$result = $sth->fetchAll();
+print_r($result);
 ?>
