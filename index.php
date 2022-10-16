@@ -1,7 +1,7 @@
 <?php
 echo "helo00";
 try {
-    $dbhost = $_SERVER["awseb-e-ez8jeiprkj-stack-awsebrdsdatabase-tcz1qn5j8iij.ciedmyepmavr.ap-south-1.rds.amazonaws.com:3306"];
+    $dbhost = $_SERVER["127.0.0.1:3306"];
     //$link = new mysqli($_SERVER['awseb-e-ez8jeiprkj-stack-awsebrdsdatabase-tcz1qn5j8iij.ciedmyepmavr.ap-south-1.rds.amazonaws.com'], $_SERVER['admin'], $_SERVER['rajesh123A'], $_SERVER['user'], $_SERVER['3306']);
     $dbname = $_SERVER["user"];
     $charset = 'utf8' ;
