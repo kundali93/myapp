@@ -1,16 +1,16 @@
 <?php
 echo "helo00";
 try {
-    $dbhost = $_SERVER["awseb-e-ez8jeiprkj-stack-awsebrdsdatabase-t4rcjts3piik.ciedmyepmavr.ap-south-1.rds.amazonaws.com:3306"];
-    //$link = new mysqli($_SERVER['awseb-e-ez8jeiprkj-stack-awsebrdsdatabase-t4rcjts3piik.ciedmyepmavr.ap-south-1.rds.amazonaws.com:3306'], $_SERVER['admin'], $_SERVER['rajesh123A'], $_SERVER['react_crud'], $_SERVER['3306']);
-    $dbname = $_SERVER["user"];
-    $charset = 'utf8' ;
+    //$dbhost = $_SERVER["awseb-e-ez8jeiprkj-stack-awsebrdsdatabase-t4rcjts3piik.ciedmyepmavr.ap-south-1.rds.amazonaws.com:3306"];
+    $link = new mysqli($_SERVER['awseb-e-ez8jeiprkj-stack-awsebrdsdatabase-tcz1qn5j8iij.ciedmyepmavr.ap-south-1.rds.amazonaws.com'], $_SERVER['admin'], $_SERVER['rajesh123A'], $_SERVER['user'], $_SERVER['3306']);
+    //$dbname = $_SERVER["user"];
+    //$charset = 'utf8' ;
 
-    $dsn = "mysql:host={$dbhost};dbname={$dbname};charset={$charset}";
-    $username = $_SERVER['admin'];
-    $password = $_SERVER['rajesh123A'];
+    //$dsn = "mysql:host={$dbhost};dbname={$dbname};charset={$charset}";
+    //$username = $_SERVER['admin'];
+    //$password = $_SERVER['rajesh123A'];
 
-    $pdo = new PDO($dsn, $username, $password);
+    //$pdo = new PDO($dsn, $username, $password);
     echo "done";
 }
 
