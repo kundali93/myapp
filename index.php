@@ -1,14 +1,11 @@
 <?php
-$servername = 'database-2.ciedmyepmavr.ap-south-1.rds.amazonaws.com:3306';
-$username = "admin";
-$password = "rajesh123A";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password);
-
-// Check connection
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
+$mysqli = new mysqli("database-2.ciedmyepmavr.ap-south-1.rds.amazonaws.com:3306", "admin", "rajesh123A", "react_crud");
+if ($mysqli->connect_errno) {
+    echo "Failed to connect to MySQL: " . $mysqli->connect_error;
 }
-echo "Connected successfully";
+
+$res = $mysqli->query("SHOW TABLES [FROM react_crud] [LIKE '%']");
+
+echo $res;
+
 ?>
