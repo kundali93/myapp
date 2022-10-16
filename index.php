@@ -12,6 +12,13 @@ $connection = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD);
 
 if (mysqli_connect_errno()) echo "Failed to connect to MySQL: " . mysqli_connect_error();
 
+if (mysqli_connect_errno()) {
+  echo "Error while connecting db";
+} else {
+  echo "Connected to db";
+}
+
+
 $database = mysqli_select_db($connection, DB_DATABASE);
 
 /* Ensure that the EMPLOYEES table exists. */
