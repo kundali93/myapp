@@ -1,82 +1,157 @@
+<?php include "../dbinfi.inc"; ?>
+
+<html><body>
+
+<h1>Sample page</h1>
+
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: *");
 
-include 'DbConnect.php';
-$objDb = new DbConnect;
-$conn = $objDb->connect();
+/* Connect to MySQL and select the database. */
 
-$method = $_SERVER['REQUEST_METHOD'];
-switch($method) {
-    case "GET":
-        $sql = "SELECT * FROM users";
-        $path = explode('/', $_SERVER['REQUEST_URI']);
-        if(isset($path[3]) && is_numeric($path[3])) {
-            $sql .= " WHERE id = :id";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':id', $path[3]);
-            $stmt->execute();
-            $users = $stmt->fetch(PDO::FETCH_ASSOC);
-        } else {
-            $stmt = $conn->prepare($sql);
-            $stmt->execute();
-            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
+$connection = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD);
 
-        echo json_encode($users);
-        break;
-    case "POST":
-        $user = json_decode( file_get_contents('php://input') );
-        $sql = "INSERT INTO users(id, name, email, mobile, created_at) VALUES(null, :name, :email, :mobile, :created_at)";
-        $stmt = $conn->prepare($sql);
-        $created_at = date('Y-m-d');
-        $stmt->bindParam(':name', $user->name);
-        $stmt->bindParam(':email', $user->email);
-        $stmt->bindParam(':mobile', $user->mobile);
-        $stmt->bindParam(':created_at', $created_at);
+if (mysqli_connect_errno()) echo "Failed to connect to MySQL: " . mysqli_connect_error();
 
-        if($stmt->execute()) {
-            $response = ['status' => 1, 'message' => 'Record created successfully.'];
-        } else {
-            $response = ['status' => 0, 'message' => 'Failed to create record.'];
-        }
-        echo json_encode($response);
-        break;
+$database = mysqli_select_db($connection, DB_DATABASE);
 
-    case "PUT":
-        $user = json_decode( file_get_contents('php://input') );
-        $sql = "UPDATE users SET name= :name, email =:email, mobile =:mobile, updated_at =:updated_at WHERE id = :id";
-        $stmt = $conn->prepare($sql);
-        $updated_at = date('Y-m-d');
-        $stmt->bindParam(':id', $user->id);
-        $stmt->bindParam(':name', $user->name);
-        $stmt->bindParam(':email', $user->email);
-        $stmt->bindParam(':mobile', $user->mobile);
-        $stmt->bindParam(':updated_at', $updated_at);
+/* Ensure that the EMPLOYEES table exists. */
 
-        if($stmt->execute()) {
-            $response = ['status' => 1, 'message' => 'Record updated successfully.'];
-        } else {
-            $response = ['status' => 0, 'message' => 'Failed to update record.'];
-        }
-        echo json_encode($response);
-        break;
+VerifyEmployeesTable($connection, DB_DATABASE);
 
-    case "DELETE":
-        $sql = "DELETE FROM users WHERE id = :id";
-        $path = explode('/', $_SERVER['REQUEST_URI']);
+/* If input fields are populated, add a row to the EMPLOYEES table. */
 
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':id', $path[3]);
+$employee_name = htmlentities($_POST['NAME']);
 
-        if($stmt->execute()) {
-            $response = ['status' => 1, 'message' => 'Record deleted successfully.'];
-        } else {
-            $response = ['status' => 0, 'message' => 'Failed to delete record.'];
-        }
-        echo json_encode($response);
-        break;
+$employee_address = htmlentities($_POST['ADDRESS']);
+
+if (strlen($employee_name) || strlen($employee_address)) {
+
+AddEmployee($connection, $employee_name, $employee_address);
+
 }
+
+?>
+
+<!-- Input form -->
+
+<form action="<?PHP echo $_SERVER['SCRIPT_NAME'] ?>" method="POST">
+
+<table border="0">
+
+<tr><td>NAME</td><td>ADDRESS</td></tr>
+
+<tr>
+
+<td><input type="text" name="NAME" maxlength="45" size="30" /></td>
+
+<td><input type="text" name="ADDRESS" maxlength="90" size="60" /></td>
+
+<td><input type="submit" value="Add Data" /></td>
+
+</tr>
+
+</table>
+
+</form>
+
+<!-- Display table data. -->
+
+<table border="1" cellpadding="2" cellspacing="2">
+
+<tr><td>ID</td><td>NAME</td><td>ADDRESS</td></tr>
+
+<?php
+
+$result = mysqli_query($connection, "SELECT * FROM EMPLOYEES");
+
+while($query_data = mysqli_fetch_row($result)) {
+
+echo "<tr>";
+
+echo "<td>",$query_data[0], "</td>",
+
+"<td>",$query_data[1], "</td>",
+
+"<td>",$query_data[2], "</td>";
+
+echo "</tr>";
+
+}
+
+?>
+
+</table>
+
+<!-- Clean up. -->
+
+<?php
+
+mysqli_free_result($result);
+
+mysqli_close($connection);
+
+?>
+
+</body></html>
+
+<?php
+
+/* Add an employee to the table. */
+
+function AddEmployee($connection, $name, $address) {
+
+$n = mysqli_real_escape_string($connection, $name);
+
+$a = mysqli_real_escape_string($connection, $address);
+
+$query = "INSERT INTO EMPLOYEES (NAME, ADDRESS) VALUES ('$n', '$a');";
+
+if(!mysqli_query($connection, $query)) echo("<p>Error adding employee data.</p>");
+
+}
+
+/* Check whether the table exists and, if not, create it. */
+
+function VerifyEmployeesTable($connection, $dbName) {
+
+if(!TableExists("EMPLOYEES", $connection, $dbName))
+
+{
+
+$query = "CREATE TABLE EMPLOYEES (
+
+ID int(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+
+NAME VARCHAR(45),
+
+ADDRESS VARCHAR(90)
+
+)";
+
+if(!mysqli_query($connection, $query)) echo("<p>Error creating table.</p>");
+
+}
+
+}
+
+/* Check for the existence of a table. */
+
+function TableExists($tableName, $connection, $dbName) {
+
+$t = mysqli_real_escape_string($connection, $tableName);
+
+$d = mysqli_real_escape_string($connection, $dbName);
+
+$checktable = mysqli_query($connection,
+
+"SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_NAME =
+
+'$t' AND TABLE_SCHEMA = '$d'");
+
+if(mysqli_num_rows($checktable) > 0) return true;
+
+return false;
+
+}
+
+?>
