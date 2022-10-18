@@ -21,7 +21,5 @@ $result = $sth->fetchAll();
 
 print_r($result);
 echo "\n all done"
-  
-$string=implode(",",$result);
-echo $string;
+
 ?>
