@@ -18,16 +18,8 @@ print("Fetch all of the remaining rows in the result set:\n");
 $result = $sth->fetchAll();
 
 
-if ($sth->num_rows > 0) {
 
-  while($row = $sth->fetch_assoc()) {
-    echo "Name: ". $row["user_id"]. "<br>";
-  }
-} 
-else {
-  echo "0 results";
-}
 
-//print_r($result);
+print_r($result);
 echo "\n all done"
 ?>
