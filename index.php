@@ -20,6 +20,6 @@ echo "<br>";
 $result = $sth->fetchAll();
 
 print_r($result);
-echo "\n all done"
+echo "<br> all done"
 
 ?>
