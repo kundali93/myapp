@@ -15,10 +15,9 @@ $sth->execute();
 echo "<br>";
 /* Fetch all of the remaining rows in the result set */
 print("Fetch all of the remaining rows in the result set:\n");
+echo "<br>";
+
 $result = $sth->fetchAll();
-
-
-
 
 print_r($result);
 echo "\n all done"
