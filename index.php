@@ -12,10 +12,21 @@ $conn = $objDb->connect();
 
 $sth = $conn->prepare("SELECT * FROM user");
 $sth->execute();
-
+echo "<br>";
 /* Fetch all of the remaining rows in the result set */
 print("Fetch all of the remaining rows in the result set:\n");
 $result = $sth->fetchAll();
+
+
+if ($result->num_rows > 0) {
+  // output data of each row
+  while($row = $result->fetch_assoc()) {
+    echo "Name: " . $row["user_id"] . "<br>";
+  }
+} else {
+  echo "0 results";
+}
+
 print_r($result);
 echo "\n all done"
 ?>
