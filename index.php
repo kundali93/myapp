@@ -19,14 +19,15 @@ $result = $sth->fetchAll();
 
 
 if ($result->num_rows > 0) {
-  // output data of each row
+
   while($row = $result->fetch_assoc()) {
-    echo "Name: " . $row["user_id"] . "<br>";
+    echo "Name: ". $row["user_id"]. "<br>";
   }
-} else {
+} 
+else {
   echo "0 results";
 }
 
-print_r($result);
+//print_r($result);
 echo "\n all done"
 ?>
